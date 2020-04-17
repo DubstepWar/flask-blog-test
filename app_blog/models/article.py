@@ -1,5 +1,5 @@
-from app.database.db import db
-from app.database.db import ma
+from app_blog.database.db import db
+from app_blog.database.db import ma
 
 
 class Article(db.Model):
@@ -14,7 +14,7 @@ class Article(db.Model):
 
 class ArticleSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'title', 'description')
+        fields = ("id", "title", "description")
 
 
 article_schema = ArticleSchema()
