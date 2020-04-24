@@ -1,16 +1,12 @@
-from flask import request
+from flask import Blueprint, jsonify
+from ..models.article import Article
 
-from ..database.db import db
-from ..models.article import Article, article_schema
+articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
 
 
-def add_article():
-    title = request.json["title"]
-    description = request.json["description"]
+@articles_blueprint.route("/")
+def get_articles():
+    articles = Article.query.all()
+    print(articles)
 
-    new_article = Article(title, description)
-
-    db.session.add(new_article)
-    db.session.commit()
-
-    return article_schema.jsonify(new_article)
+    return jsonify(articles)

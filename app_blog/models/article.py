@@ -1,21 +1,18 @@
-from app_blog.database.db import db
-from app_blog.database.db import ma
+from sqlalchemy import Column, Integer, String
+from ..database.db import Base
 
 
-class Article(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=True)
-    description = db.Column(db.String(200))
+class Article(Base):
+
+    __tablename__ = "articles"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(100), unique=True)
+    description = Column(String(200))
 
     def __init__(self, title, description):
         self.title = title
         self.description = description
 
-
-class ArticleSchema(ma.Schema):
-    class Meta:
-        fields = ("id", "title", "description")
-
-
-article_schema = ArticleSchema()
-articles_schema = ArticleSchema(many=True)
+    def __repr__(self):
+        return "<Article %r>" % self.title
