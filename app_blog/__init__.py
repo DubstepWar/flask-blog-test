@@ -1,17 +1,21 @@
 from flask import Flask
+from flask_migrate import Migrate, Manager, MigrateCommand
+from flask_sqlalchemy import SQLAlchemy
 
-from app_blog.database.db import db_session, init_db
 from config import Configuration
 from .controllers import register_blueprints
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
 
-init_db()
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
+manager = Manager(app)
+manager.add_command("db", MigrateCommand)
+
+# register controllers/blueprints
 register_blueprints(app)
 
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
+if __name__ == "__main__":
+    manager.run()
