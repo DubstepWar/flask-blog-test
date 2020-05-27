@@ -1,0 +1,17 @@
+GET http://127.0.0.1:5000/articles
+Accept: application/json
+
+###
+POST http://127.0.0.1:5000/articles/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "Second article",
+  "slug": "second-article",
+  "content": "Second article content"
+}
+
+###
+GET http://127.0.0.1:5000/articles/2
+Accept: application/json

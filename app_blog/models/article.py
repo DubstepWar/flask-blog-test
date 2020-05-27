@@ -1,24 +1,26 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 
-from app_blog import db
+from app_blog.extensions import db
 
 
 class Article(db.Model):
-
     __tablename__ = "articles"
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String(110))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(110), nullable=False)
     slug = Column(String(200), unique=True)
-    description = Column(String(200))
-
-    def __init__(self, title=None, description=None, slug=None):
-        self.title = title
-        self.slug = slug
-        self.description = description
+    content = Column(Text, nullable=False)
 
     def __str__(self):
         return self.title
 
     def __repr__(self):
-        return f"<Article title={self.title}>"
+        return f"<Article id={self.id} title={self.title}>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "slug": self.slug,
+            "content": self.content
+        }

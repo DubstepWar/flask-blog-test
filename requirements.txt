@@ -1,5 +1,5 @@
 flask
+alembic
 sqlalchemy
 flask-sqlalchemy
-Flask-Alembic
-Flask-Migrate
+flask-migrate
