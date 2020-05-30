@@ -1,16 +1,25 @@
-# from typing import List, Optional
-#
-# from ..models.article import Article
-#
-#
-# class ArticleService:
-#     def __init__(self):
-#         self.articles: Optional[List[Article]] = None
-#
-#     def get_articles(self):
-#         self.articles = Article.query.all()
-#         return self.articles
-#
-#     def create_article(self, article_data: Article):
-#         print(article_data)
-#         Article.session.a
+from typing import List
+
+from app_blog.models import Article
+from app_blog.models.article import ArticleSchema
+
+
+class ArticleService:
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_articles():
+        articles: List[Article] = Article.query.all()
+        print(articles)
+
+        return articles
+
+    @staticmethod
+    def create_article(request):
+        data = request.get_json()
+        article = Article(**data)
+
+        return article
+

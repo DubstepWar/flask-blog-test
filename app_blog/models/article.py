@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
 
-from app_blog.extensions import db
+from app_blog.extensions import db, ma
 
 
 class Article(db.Model):
@@ -24,3 +24,9 @@ class Article(db.Model):
             "slug": self.slug,
             "content": self.content
         }
+
+
+class ArticleSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Article
+        # include_fk = True хз что это

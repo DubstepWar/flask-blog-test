@@ -1,39 +1,34 @@
-from typing import List
-
 from flask import Blueprint, jsonify, request
 
 from app_blog.extensions import db
 from app_blog.models import Article
+from app_blog.services.article_service import ArticleService
 
 articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
 
 
-@articles_blueprint.route("", methods=["GET"])
+@articles_blueprint.route("", methods=["GET", "POST"])
 def get_articles():
-    articles: List[Article] = Article.query.all()
+    if request.method == "GET":
+        result = ArticleService.get_articles()
 
-    result = [article.to_dict() for article in articles]
-    return jsonify({
-        "result": result,
-        "status": "ok",
-        "success": True
-    })
+        return jsonify({
+            "result": result,
+            "status": "ok",
+            "success": True
+        })
+    elif request.method == "POST":
+        article = ArticleService.create_article(request)
+        print(article)
 
+        db.session.add(article)
+        db.session.commit()
 
-@articles_blueprint.route("/create", methods=["POST"])
-def create_article():
-    data = request.get_json()
-
-    article = Article(**data)
-
-    db.session.add(article)
-    db.session.commit()
-
-    return jsonify({
-        "result": article.to_dict(),
-        "status": "ok",
-        "success": True
-    }), 201
+        return jsonify({
+            "result": article.to_dict(),
+            "status": "ok",
+            "success": True
+        }), 201
 
 
 @articles_blueprint.route("/<int:article_id>")
