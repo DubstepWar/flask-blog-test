@@ -1,7 +1,9 @@
 from typing import List
 
+from slugify import slugify
+
 from app_blog.models import Article
-from app_blog.models.article import articles_schema, article_schema
+from app_blog.models.article import articles_schema
 
 
 class ArticleService:
@@ -18,7 +20,7 @@ class ArticleService:
     @staticmethod
     def create_article(request):
         data = request.get_json()
-        print(data)
+        data['slug'] = slugify(data['title'])
         article = Article(**data)
 
         return article

@@ -6,3 +6,4 @@ flask-migrate
 flask-marshmallow
 marshmallow-sqlalchemy
 cerberus
+python-slugify
