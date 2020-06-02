@@ -17,16 +17,12 @@ class Article(db.Model):
     def __repr__(self):
         return f"<Article id={self.id} title={self.title}>"
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "slug": self.slug,
-            "content": self.content
-        }
-
 
 class ArticleSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Article
         # include_fk = True хз что это
+
+
+article_schema = ArticleSchema()
+articles_schema = ArticleSchema(many=True)
