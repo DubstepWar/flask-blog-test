@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from typing import List
 
-from app_blog.extensions import db
+from app_blog.extensions import db, v
 from app_blog.models import Article
 from app_blog.models.article import article_schema
 from app_blog.services.article_service import ArticleService
@@ -20,6 +20,29 @@ def get_articles():
             "success": True
         })
     elif request.method == "POST":
+        schema = {
+            'title': {
+                'type': 'string',
+                'required': True
+            },
+            'slug': {
+                'type': 'string',
+                'required': True
+            },
+            'content': {
+                'type': 'string',
+            },
+        }
+
+        print(v.errors)
+
+        if not v.validate(request.get_json(), schema):
+            return jsonify({
+                "status": "error",
+                "errors": v.errors,
+                "success": False
+            })
+
         article: Article = ArticleService.create_article(request)
 
         db.session.add(article)
@@ -33,13 +56,12 @@ def get_articles():
             "success": True
         }), 201
 
+    @articles_blueprint.route("/<int:article_id>")
+    def get_article(article_id):
+        article: Article = Article.query.get_or_404(article_id)
 
-@articles_blueprint.route("/<int:article_id>")
-def get_article(article_id):
-    article: Article = Article.query.get_or_404(article_id)
-
-    return jsonify({
-        "success": True,
-        "status": "Ok",
-        "result": article.to_dict()
-    })
+        return jsonify({
+            "success": True,
+            "status": "Ok",
+            "result": article.to_dict()
+        })
