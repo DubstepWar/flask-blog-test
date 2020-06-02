@@ -41,10 +41,11 @@ def get_articles():
 
     @articles_blueprint.route("/<string:article_slug>")
     def get_article(article_slug):
-        article: Article = Article.query.get_or_404(article_slug)
+        print("ne rabotaet, nyjno yznat' po4emy")
+        article: Article = Article.query.filter_by(slug=article_slug).first()
 
         return jsonify({
             "success": True,
             "status": "Ok",
-            "result": article.to_dict()
+            "result": article_schema(article)
         })
