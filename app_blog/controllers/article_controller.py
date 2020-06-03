@@ -4,7 +4,7 @@ from typing import List
 from app_blog.extensions import db, v
 from app_blog.models import Article
 from app_blog.models.article import article_schema
-from app_blog.services.article_service import ArticleService
+from app_blog.services.article_service import article_service
 from app_blog.validation_rules.article_rules import create_article_rules
 
 articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
@@ -13,7 +13,7 @@ articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
 @articles_blueprint.route("", methods=["GET", "POST"])
 def get_articles():
     if request.method == "GET":
-        articles: List[Article] = ArticleService.get_articles()
+        articles: List[Article] = article_service.get_articles()
 
         return jsonify({
             "result": articles,
@@ -28,7 +28,7 @@ def get_articles():
                 "success": False
             })
 
-        article: Article = ArticleService.create_article(request)
+        article: Article = article_service.create_article(request)
 
         db.session.add(article)
         db.session.commit()

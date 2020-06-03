@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from slugify import slugify
 
@@ -9,19 +9,21 @@ from app_blog.models.article import articles_schema
 class ArticleService:
 
     def __init__(self):
-        pass
+        self.articles: List[Article] = []
+        self.article: Optional[Article] = None
 
-    @staticmethod
-    def get_articles():
-        articles: List[Article] = Article.query.all()
+    def get_articles(self):
+        self.articles = Article.query.all()
 
-        return articles_schema.dump(articles)
+        return articles_schema.dump(self.articles)
 
-    @staticmethod
-    def create_article(request):
+    def create_article(self, request):
         data = request.get_json()
         data['slug'] = slugify(data['title'])
-        article = Article(**data)
+        self.article = Article(**data)
 
-        return article
+        return self.article
+
+
+article_service = ArticleService()
 
