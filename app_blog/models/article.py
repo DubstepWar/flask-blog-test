@@ -8,7 +8,7 @@ class Article(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(110), nullable=False)
-    slug = Column(String(200), unique=True)
+    slug = Column(String(200), unique=True, nullable=False)
     content = Column(Text, nullable=False)
 
     def __str__(self):

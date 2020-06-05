@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from flask import Request
 from slugify import slugify
 
 from app_blog.models import Article
@@ -17,10 +18,19 @@ class ArticleService:
 
         return articles_schema.dump(self.articles)
 
-    def create_article(self, request):
+    def create_article(self, request: Request):
         data = request.get_json()
         data['slug'] = slugify(data['title'])
         self.article = Article(**data)
+
+        return self.article
+
+    def update_article(self, article: Article, request: Request):
+        data = request.get_json()
+        article.title = data['title']
+        article.slug = data['slug']
+        article.content = data['content']
+        self.article = article
 
         return self.article
 

@@ -13,7 +13,7 @@ articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
 @articles_blueprint.route("", methods=["GET", "POST"])
 def get_articles():
     if request.method == "GET":
-        articles: List[Article] = article_service.get_articles()
+        articles = article_service.get_articles()
 
         return jsonify({
             "result": articles,
@@ -34,18 +34,50 @@ def get_articles():
         db.session.commit()
 
         return jsonify({
-            "result": article_schema.dump(article),
             "status": "ok",
             "success": True
         }), 201
 
-    @articles_blueprint.route("/<string:article_slug>")
-    def get_article(article_slug):
-        print("ne rabotaet, nyjno yznat' po4emy")
-        article: Article = Article.query.filter_by(slug=article_slug).first()
+
+@articles_blueprint.route("/<string:article_slug>", methods=['GET', 'PUT', 'DELETE'])
+def get_article(article_slug):
+    article = Article.query.filter_by(slug=article_slug).first()
+    print(article_slug)
+    print(article)
+    if not article:
+        return jsonify({
+            "status": "error",
+            "errors": ['Not found'],
+            "success": False
+        })
+
+    if request.method == 'GET':
+        return jsonify({
+            "success": True,
+            "status": "Ok",
+            "result": article_schema.dump(article)
+        })
+
+    if request.method == 'PUT':
+        if not v.validate(request.get_json(), create_article_rules):
+            return jsonify({
+                "status": "error",
+                "errors": v.errors,
+                "success": False
+            })
+        article_service.update_article(article, request)
+        db.session.commit()
 
         return jsonify({
             "success": True,
             "status": "Ok",
-            "result": article_schema(article)
+        })
+
+    if request.method == 'DELETE':
+        db.session.delete(article)
+        db.session.commit()
+
+        return jsonify({
+            "success": True,
+            "status": "Ok",
         })
