@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, request
-from typing import List
 
 from app_blog.extensions import db, v
 from app_blog.models import Article
