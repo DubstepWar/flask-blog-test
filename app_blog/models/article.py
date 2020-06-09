@@ -1,6 +1,7 @@
 from app_blog.extensions import db, ma
 import datetime as dt
-from .tag import tags
+
+from app_blog.models.tag import article_tags
 
 
 class Article(db.Model):
@@ -10,15 +11,15 @@ class Article(db.Model):
     title = db.Column(db.String(110), nullable=False)
     slug = db.Column(db.String(200), unique=True, nullable=False)
     content = db.Column(db.Text, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id', ondelete='CASCADE'), nullable=True)
     created_at = db.Column(db.DateTime, default=dt.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=dt.datetime.utcnow,
                            onupdate=dt.datetime.utcnow)
 
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id', ondelete='CASCADE'), nullable=True)
     category = db.relationship('Category',
                                backref=db.backref('articles', lazy=True))
 
-    tags = db.relationship('Tag', secondary=tags, lazy='subquery',
+    tags = db.relationship('Tag', secondary=article_tags, lazy='subquery',
                            backref=db.backref('articles', lazy=True))
 
     def __str__(self):

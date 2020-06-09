@@ -1,9 +1,16 @@
-from app_blog import db
+from app_blog.extensions import db
 import datetime as dt
+
+article_tags = db.Table(
+    'article_tags',
+    db.Column('article_id', db.Integer, db.ForeignKey('articles.id', primary_key=True)),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', primary_key=True))
+)
 
 
 class Tag(db.Model):
     __tablename__ = 'tags'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False, unique=True)
@@ -16,9 +23,3 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f"<Tag id={self.id} name={self.name}>"
-
-
-tags = db.Table('tags',
-                db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', primary_key=True)),
-                db.Column('article_id', db.Integer, db.ForeignKey('tags.id', primary_key=True))
-                )

@@ -1,4 +1,4 @@
-from app_blog import db
+from app_blog.extensions import db
 import datetime as dt
 
 
