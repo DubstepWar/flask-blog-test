@@ -41,8 +41,6 @@ def get_articles():
 @articles_blueprint.route("/<string:article_slug>", methods=['GET', 'PUT', 'DELETE'])
 def get_article(article_slug):
     article = Article.query.filter_by(slug=article_slug).first()
-    print(article_slug)
-    print(article)
     if not article:
         return jsonify({
             "status": "error",

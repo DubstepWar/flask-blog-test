@@ -1,5 +1,7 @@
 from app_blog.extensions import db, ma
 import datetime as dt
+from ..models.category import Category
+from ..models.tag import Tag
 
 from app_blog.models.tag import article_tags
 
@@ -7,7 +9,7 @@ from app_blog.models.tag import article_tags
 class Article(db.Model):
     __tablename__ = "articles"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(110), nullable=False)
     slug = db.Column(db.String(200), unique=True, nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -17,7 +19,8 @@ class Article(db.Model):
                            onupdate=dt.datetime.utcnow)
 
     category = db.relationship('Category',
-                               backref=db.backref('articles', lazy=True))
+                               backref=db.backref('articles', lazy=True),
+                               lazy=False)
 
     tags = db.relationship('Tag', secondary=article_tags, lazy='subquery',
                            backref=db.backref('articles', lazy=True))
