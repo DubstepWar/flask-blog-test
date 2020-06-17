@@ -1,4 +1,4 @@
-from app_blog.extensions import db
+from app_blog.extensions import db, ma
 import datetime as dt
 
 
@@ -17,6 +17,11 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f"<Tag id={self.id} name={self.name}>"
+
+
+class TagSchema(ma.SQLAlchemyAutoSchema):
+    model = Tag
+    # include_fk = True хз что это
 
 
 article_tags = db.Table(

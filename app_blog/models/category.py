@@ -1,4 +1,4 @@
-from app_blog.extensions import db
+from app_blog.extensions import db, ma
 import datetime as dt
 
 
@@ -18,7 +18,7 @@ class Category(db.Model):
         return f"<Category id={self.id} name={self.name}>"
 
 
-class CategorySchema(db.SQLAlchemyAutoSchema):
+class CategorySchema(ma.SQLAlchemyAutoSchema):
     model = Category
     # include_fk = True хз что это
 
