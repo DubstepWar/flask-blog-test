@@ -11,7 +11,7 @@ class CategoriesService:
         self.category: Optional[Category] = None
 
     def get_categories(self):
-        self.categories = Category.qury.all()
+        self.categories = Category.query.all()
         return categories_schema.dump(self.categories)
 
     def add_category(self, request: Request):

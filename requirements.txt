@@ -8,5 +8,4 @@ marshmallow-sqlalchemy
 cerberus
 python-slugify
 flask-cors
-flask-bcrypt
-pyjwt
+flask-jwt

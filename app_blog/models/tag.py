@@ -24,6 +24,9 @@ class TagSchema(ma.SQLAlchemyAutoSchema):
     # include_fk = True хз что это
 
 
+tag_schema = TagSchema()
+tags_schema = TagSchema(many=True)
+
 article_tags = db.Table(
     'article_tags',
     db.Column('article_id', db.Integer, db.ForeignKey('articles.id', primary_key=True)),
