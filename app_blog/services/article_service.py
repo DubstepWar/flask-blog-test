@@ -1,39 +1,38 @@
 from typing import List, Optional
 
-from flask import Request
 from slugify import slugify
 
+from app_blog.extensions import db
 from app_blog.models import Article
-from app_blog.models.article import articles_schema
 
 
 class ArticleService:
-
     def __init__(self):
         self.articles: List[Article] = []
         self.article: Optional[Article] = None
 
     def get_articles(self):
-        self.articles = Article.query.all()
+        return Article.query.all()
 
-        return articles_schema.dump(self.articles)
+    def create_article(self, data) -> Article:
+        data["slug"] = slugify(data["title"])
 
-    def create_article(self, request: Request):
-        data = request.get_json()
-        data['slug'] = slugify(data['title'])
-        self.article = Article(**data)
+        article = Article(**data)
 
-        return self.article
+        db.session.add(article)
+        db.session.commit()
 
-    def update_article(self, article: Article, request: Request):
-        data = request.get_json()
-        article.title = data['title']
-        article.slug = data['slug']
-        article.content = data['content']
-        self.article = article
+        return article
 
-        return self.article
+    def update_article(self, article: Article, data) -> Article:
+        article.title = data["title"]
+        article.content = data["content"]
+        # еще категория, и все остальное, что нужно для обновления
+
+        db.session.add(article)
+        db.session.commit()
+
+        return article
 
 
 article_service = ArticleService()
-
