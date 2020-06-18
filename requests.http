@@ -1,17 +1,52 @@
+@access_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTMwODEyMzcsImlhdCI6MTU5MjQ3NjQzNywibmJmIjoxNTkyNDc2NDM3LCJpZGVudGl0eSI6MX0.lJYvNIMPwHaBm9y5muon1M13-BBOa6ffpTfChewUwQ8
+
+### 
+POST http://127.0.0.1:5000/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "user@example.com",
+  "username": "user",
+  "password": "password"
+}
+
+###
+POST http://127.0.0.1:5000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "user",
+  "password": "password"
+}
+
+###
 GET http://127.0.0.1:5000/articles
 Accept: application/json
 
 ###
-POST http://127.0.0.1:5000/articles/create
+POST http://127.0.0.1:5000/articles
+Authorization: JWT {{access_token}}
 Accept: application/json
 Content-Type: application/json
 
 {
-  "title": "Second article",
-  "slug": "second-article",
-  "content": "Second article content"
+  "title": "My second article",
+  "content": "There should be something interesting..."
 }
 
 ###
-GET http://127.0.0.1:5000/articles/2
+PUT http://127.0.0.1:5000/articles/my-first-article
+Authorization: JWT {{access_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "My first article",
+  "content": "There should be something interesting... New content."
+}
+
+###
+GET http://127.0.0.1:5000/articles/my-first-article
 Accept: application/json
