@@ -18,7 +18,7 @@ def register():
             "status": "fail",
             "message": "User already exists. Please Log in.",
         }
-        return make_response(jsonify(response_object)), 202
+        return jsonify(response_object), 403
 
     try:
         user = User(
@@ -36,10 +36,10 @@ def register():
             "message": "Successfully registered.",
         }
 
-        return make_response(jsonify(response_object)), 201
+        return jsonify(response_object), 201
     except Exception:
         response_object = {
             "status": "fail",
             "message": "Some error occurred. Please try again.",
         }
-        return make_response(jsonify(response_object)), 401
+        return jsonify(response_object), 401
