@@ -14,9 +14,7 @@ articles_blueprint = Blueprint("articles", __name__, url_prefix="/articles")
 def get_articles():
     articles = article_service.get_articles()
 
-    return jsonify(
-        {"result": articles_schema.dump(articles), "status": "ok", "success": True}
-    )
+    return jsonify(articles_schema.dump(articles))
 
 
 @articles_blueprint.route("", methods=["POST"])
@@ -56,9 +54,7 @@ def get_article(slug):
     if not article:
         return jsonify({"status": "error", "message": "Not found", "success": False})
 
-    return jsonify(
-        {"success": True, "status": "Ok", "result": article_schema.dump(article)}
-    )
+    return jsonify(article_schema.dump(article))
 
 
 @articles_blueprint.route("/<slug>", methods=["PUT"])
