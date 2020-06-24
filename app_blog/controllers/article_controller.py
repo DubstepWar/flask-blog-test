@@ -52,7 +52,7 @@ def create_article():
 def get_article(slug):
     article = Article.query.filter_by(slug=slug).first()
     if not article:
-        return jsonify({"status": "error", "message": "Not found", "success": False})
+        return jsonify({"status": "error", "message": "Not found", "success": False}), 401
 
     return jsonify(article_schema.dump(article))
 
